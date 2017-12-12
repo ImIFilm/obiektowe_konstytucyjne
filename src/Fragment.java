@@ -1,12 +1,16 @@
-abstract class Fragment {
-    int numer;
-    String treść;
+import java.util.List;
 
-    public String stringFragmentu()
+public class Fragment {
+    TypFragmentu typ;
+    String treść;
+    List<Fragment> lista;
+
+    Fragment (TypFragmentu t, String s, List<Fragment> l)
     {
-        String string = new String();
-        string=numer + " " + treść;
-        return string;
+        typ=t;
+        treść=s;
+        lista=l;
     }
+
 
 }
