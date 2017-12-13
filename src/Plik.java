@@ -1,4 +1,6 @@
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Plik {
     List<String> lista;
@@ -123,6 +125,60 @@ public class Plik {
         }
         return lista;
     }
+
+
+    public Fragment Strukturyzuje()
+    {
+        Fragment root=new Fragment();
+        Fragment AktualnyRozdział=null;
+        Fragment AktualnyArtykuł=null;
+        Fragment AktualnyPunkt=null;
+
+
+        for (int i=0; i<lista.size(); i++)
+        {
+            Pattern patternRozdziału = Pattern.compile("Rozdział");
+            Matcher matcherRoz = patternRozdziału.matcher(lista.get(i));
+            Pattern patternArtykułu = Pattern.compile("Art.");
+            Matcher matcherArt = patternArtykułu.matcher(lista.get(i));
+            Pattern patternPunktu = Pattern.compile("\\d+\\.");
+            Matcher matcherPkt = patternPunktu.matcher(lista.get(i));
+            Pattern patternPodpunktu = Pattern.compile("\\d+\\)");
+            Matcher matcherPpkt = patternPodpunktu.matcher(lista.get(i));
+            if(matcherRoz.find()==true) //jesli jest rozdziałem
+            {
+                Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i));
+                root.lista.add(a);
+                AktualnyRozdział=a;
+            }
+            else if(matcherArt.find()==true) //jesli jest artykułem
+            {
+                Fragment a = new Fragment(TypFragmentu.Artykuł, lista.get(i));
+                AktualnyRozdział.lista.add(a);
+                AktualnyArtykuł=a;
+            }
+            else if(matcherPkt.find()==true) //jesli jest artykułem
+            {
+                Fragment a = new Fragment(TypFragmentu.Punkt, lista.get(i));
+                AktualnyArtykuł.lista.add(a);
+                AktualnyPunkt=a;
+            }
+            else if(matcherPpkt.find()==true) //jesli jest artykułem
+            {
+                Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i));
+                AktualnyPunkt.lista.add(a);
+            }
+            else
+            {
+                Fragment a = new Fragment(TypFragmentu.Root, lista.get(i));
+                //root.lista.add(a);
+            }
+        }
+        return root;
+    }
+
+
+
 
 
 }

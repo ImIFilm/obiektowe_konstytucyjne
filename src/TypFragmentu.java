@@ -3,5 +3,6 @@ public enum TypFragmentu {
     Punkt,
     Podpunkt,
     Dział,
-    Rozdział
+    Rozdział,
+    Root
 }

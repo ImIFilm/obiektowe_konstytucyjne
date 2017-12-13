@@ -13,7 +13,7 @@ public class Parser {
         coParsujemy=co;
     }
 
-    public List<String> WczytujeIPoprawia() throws IOException {
+    public Fragment WczytujeIPoprawia() throws IOException {
         String string=new String();
 
         if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
@@ -28,9 +28,12 @@ public class Parser {
         listaStringów=s.usuwaZnaczki();
         listaStringów=s.załatwiaProblemPrzeniesieniaLinii();
         listaStringów=s.dzieliNaCzytelneWersy();
-
         if(coParsujemy.equals("uokik")) listaStringów=s.uporczyweArtykuły(); //jesli uokik, to trzeba poradzic sobie z nowym problemem
-        return listaStringów;
+
+        List<Fragment> listaFragmentów=new LinkedList<>();
+        Fragment fragment=new Fragment(TypFragmentu.Root, "root");
+        fragment=s.Strukturyzuje();
+        return fragment;
         }
 
 
