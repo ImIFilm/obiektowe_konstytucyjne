@@ -147,30 +147,78 @@ public class Plik {
             Matcher matcherPpkt = patternPodpunktu.matcher(lista.get(i));
             if(matcherRoz.find()==true) //jesli jest rozdziałem
             {
-                Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i));
+                String line = lista.get(i);
+                String pattern = "[XVI][XVI]*[XVI]*[XVI]*";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(line);
+                int foo=0;
+                if (m.find( ))
+                {
+                    switch (m.group(0))
+                    {
+                        case ("I"): foo=1; break;
+                        case ("II"): foo=2; break;
+                        case ("III"): foo=3; break;
+                        case ("IV"): foo=4; break;
+                        case ("V"): foo=5; break;
+                        case ("VI"): foo=6; break;
+                        case ("VII"): foo=7; break;
+                        case ("VIII"): foo=8; break;
+                        case ("IX"): foo=9; break;
+                        case ("X"): foo=10; break;
+                        case ("XI"): foo=11; break;
+                        case ("XII"): foo=12; break;
+                        case ("XIII"): foo=13; break;
+                        case ("XIV"): foo=14; break;
+                        case ("XV"): foo=15; break;
+                        case ("XVI"): foo=16; break;
+                        default: {}
+                    }
+
+                }
+                else {}
+                Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i), foo);
                 root.lista.add(a);
                 AktualnyRozdział=a;
             }
             else if(matcherArt.find()==true) //jesli jest artykułem
             {
-                Fragment a = new Fragment(TypFragmentu.Artykuł, lista.get(i));
+                String line = lista.get(i);
+                String pattern = "[1234567890]+";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(line);
+                int foo=0;
+                if (m.find( )) foo=Integer.parseInt(m.group());
+                Fragment a = new Fragment(TypFragmentu.Artykuł, lista.get(i), foo);
                 AktualnyRozdział.lista.add(a);
                 AktualnyArtykuł=a;
             }
             else if(matcherPkt.find()==true) //jesli jest artykułem
             {
-                Fragment a = new Fragment(TypFragmentu.Punkt, lista.get(i));
+                String line = lista.get(i);
+                String pattern = "[1234567890]+";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(line);
+                int foo=0;
+                if (m.find( )) foo=Integer.parseInt(m.group());
+                Fragment a = new Fragment(TypFragmentu.Punkt, lista.get(i), foo);
                 AktualnyArtykuł.lista.add(a);
                 AktualnyPunkt=a;
             }
             else if(matcherPpkt.find()==true) //jesli jest artykułem
             {
-                Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i));
+                String line = lista.get(i);
+                String pattern = "[1234567890]+";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(line);
+                int foo=0;
+                if (m.find( )) foo=Integer.parseInt(m.group());
+                Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i), foo);
                 AktualnyPunkt.lista.add(a);
             }
             else
             {
-                Fragment a = new Fragment(TypFragmentu.Root, lista.get(i));
+                Fragment a = new Fragment(TypFragmentu.Root, lista.get(i), 0);
                 //root.lista.add(a);
             }
         }

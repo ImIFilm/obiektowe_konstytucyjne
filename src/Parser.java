@@ -31,10 +31,28 @@ public class Parser {
         if(coParsujemy.equals("uokik")) listaStringów=s.uporczyweArtykuły(); //jesli uokik, to trzeba poradzic sobie z nowym problemem
 
         List<Fragment> listaFragmentów=new LinkedList<>();
-        Fragment fragment=new Fragment(TypFragmentu.Root, "root");
+        Fragment fragment=new Fragment(TypFragmentu.Root, "root", 1);
         fragment=s.Strukturyzuje();
         return fragment;
         }
 
+    public List<String> WczytujeIListuje() throws IOException {
+        String string=new String();
+
+        if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
+        else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
+
+        Path sciezka = Paths.get(string);
+        BufferedReader tekst= Files.newBufferedReader(sciezka);
+        List<String> listaStringów=new LinkedList();    //wczytuję tekst do listyStringów
+        for (String line; (line=tekst.readLine()) !=null; listaStringów.add(line));
+
+        Plik s=new Plik(listaStringów);
+        listaStringów=s.usuwaZnaczki();
+        listaStringów=s.załatwiaProblemPrzeniesieniaLinii();
+        listaStringów=s.dzieliNaCzytelneWersy();
+
+        return listaStringów;
+    }
 
 }
