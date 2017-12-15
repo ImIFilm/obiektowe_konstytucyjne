@@ -66,18 +66,27 @@ public class Plik {
     {
         for (int i=0; i<lista.size()-1; i++)
         {
-            int len=lista.get(i).length(); //dlugość wersu
             String string = new String();
             string=lista.get(i+1);  //pobieram co jest następnym wierszu
+            String string3=new String();
+            string3=lista.get(i);
 
-            if (string.length()>4)
+            if (string.length()>3)
             {
                 if (string.substring(0, 4).equals("Art.") ||                    //artykuł WORKS!
                         string.substring(0, 2).matches("\\d+[.)]") ||   //dowolny punkt w formacie liczba i kropka lub liczba i nawias WORKS!
                         string.substring(0, 3).matches("\\d+[.)]") ||  //j.w. WORKS!
                         string.substring(0, 4).equals("DZIA") ||            //rozdział WORKS!
                         string.substring(0, 4).equals("Rozd") ||          //dział WORKS!
-                        string.substring(0, 1).matches("\\w[)]")) //wyrażenia jako a) i b)
+                        string.substring(0, 1).matches("\\w[)]") || //wyrażenia jako a) i b)
+                        (string.substring(0, 4).matches("[A-Z]+") &&!(string3.length()<15 &&(string3.substring(0, 4).matches("Rozd")))) ||
+                        string.substring(0, 4).equals("ŚROD") ||
+                        //string.substring(0, 4).equals("ORGA") ||
+                        string.substring(0, 4).equals("REFE") ||
+                        ((string.length()<9)&& string.substring(0, 4).equals("SĄDY")) ||
+                        string.substring(0, 4).equals("POSŁ")
+                        )
+
                 {
 
                 }
@@ -89,7 +98,7 @@ public class Plik {
                     string2 = string2.concat(string);   //połączenie linii
                     lista.set(i, string2);            //ustal na tym miejscu naszą nową linię
                     lista.remove(i + 1);      //skasuj ten kolejny wiersz
-                    i--;                           //powtórz dla bezpieczeństwa
+                    i--;//powtórz dla bezpieczeństwa
                 }
             }
         }
@@ -133,6 +142,7 @@ public class Plik {
         Fragment AktualnyRozdział=null;
         Fragment AktualnyArtykuł=null;
         Fragment AktualnyPunkt=null;
+        Fragment Akt=root;
 
 
         for (int i=0; i<lista.size(); i++)
@@ -180,6 +190,7 @@ public class Plik {
                 Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i), foo);
                 root.lista.add(a);
                 AktualnyRozdział=a;
+                Akt=a;
             }
             else if(matcherArt.find()==true) //jesli jest artykułem
             {
@@ -192,6 +203,7 @@ public class Plik {
                 Fragment a = new Fragment(TypFragmentu.Artykuł, lista.get(i), foo);
                 AktualnyRozdział.lista.add(a);
                 AktualnyArtykuł=a;
+                Akt=a;
             }
             else if(matcherPkt.find()==true) //jesli jest artykułem
             {
@@ -204,6 +216,7 @@ public class Plik {
                 Fragment a = new Fragment(TypFragmentu.Punkt, lista.get(i), foo);
                 AktualnyArtykuł.lista.add(a);
                 AktualnyPunkt=a;
+                Akt=a;
             }
             else if(matcherPpkt.find()==true) //jesli jest artykułem
             {
@@ -215,11 +228,12 @@ public class Plik {
                 if (m.find( )) foo=Integer.parseInt(m.group());
                 Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i), foo);
                 AktualnyPunkt.lista.add(a);
+                Akt=a;
             }
             else
             {
                 Fragment a = new Fragment(TypFragmentu.Root, lista.get(i), 0);
-                //root.lista.add(a);
+                Akt.lista.add(a);
             }
         }
         return root;

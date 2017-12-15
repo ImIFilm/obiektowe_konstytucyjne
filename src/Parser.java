@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Parser {
+abstract class Parser {
     String coParsujemy;
     Parser (String co)
     {
@@ -14,12 +14,11 @@ public class Parser {
     }
 
     public Fragment WczytujeIPoprawia() throws IOException {
-        String string=new String();
+        //String string=new String();
+        //if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
+        //else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
 
-        if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
-        else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
-
-        Path sciezka = Paths.get(string);
+        Path sciezka = Paths.get(coParsujemy);
         BufferedReader tekst= Files.newBufferedReader(sciezka);
         List<String> listaStringów=new LinkedList();    //wczytuję tekst do listyStringów
         for (String line; (line=tekst.readLine()) !=null; listaStringów.add(line));
@@ -37,12 +36,8 @@ public class Parser {
         }
 
     public List<String> WczytujeIListuje() throws IOException {
-        String string=new String();
 
-        if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
-        else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
-
-        Path sciezka = Paths.get(string);
+        Path sciezka = Paths.get(coParsujemy);
         BufferedReader tekst= Files.newBufferedReader(sciezka);
         List<String> listaStringów=new LinkedList();    //wczytuję tekst do listyStringów
         for (String line; (line=tekst.readLine()) !=null; listaStringów.add(line));
