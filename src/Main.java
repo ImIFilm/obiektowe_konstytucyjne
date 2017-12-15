@@ -24,6 +24,7 @@ public class Main
         //fragment.WypiszArtykuły(fragment);
         fragment.WypiszSpis(fragment);
         //fragment.WypiszWgłąb(fragment);
+        //fragment.WypiszArtykułyZZakresu(3,10, fragment);
 
 
         //for (int i=0; i<fragment.lista.size(); i++) System.out.println(i+": "+fragment.lista.get(i));
@@ -31,7 +32,7 @@ public class Main
 
 
         e=konstytucja.WczytujeIListuje();
-        /*WYPISUJE*/ for (int i=0; i<e.size(); i++) System.out.println(i+": "+e.get(i));
+        //*WYPISUJE*/ for (int i=0; i<e.size(); i++) System.out.println(i+": "+e.get(i));
 
 
 

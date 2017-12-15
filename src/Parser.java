@@ -8,9 +8,9 @@ import java.util.List;
 
 abstract class Parser {
     String coParsujemy;
-    Parser (String co)
-    {
-        coParsujemy=co;
+
+    Parser(String co) {
+        coParsujemy = co;
     }
 
     public Fragment WczytujeIPoprawia() throws IOException {
@@ -19,33 +19,35 @@ abstract class Parser {
         //else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
 
         Path sciezka = Paths.get(coParsujemy);
-        BufferedReader tekst= Files.newBufferedReader(sciezka);
-        List<String> listaStringów=new LinkedList();    //wczytuję tekst do listyStringów
-        for (String line; (line=tekst.readLine()) !=null; listaStringów.add(line));
+        BufferedReader tekst = Files.newBufferedReader(sciezka);
+        List<String> listaStringów = new LinkedList();    //wczytuję tekst do listyStringów
+        for (String line; (line = tekst.readLine()) != null; listaStringów.add(line)) ;
 
-        Plik s=new Plik(listaStringów);
-        listaStringów=s.usuwaZnaczki();
-        listaStringów=s.załatwiaProblemPrzeniesieniaLinii();
-        listaStringów=s.dzieliNaCzytelneWersy();
-        if(coParsujemy.equals("uokik")) listaStringów=s.uporczyweArtykuły(); //jesli uokik, to trzeba poradzic sobie z nowym problemem
+        Tekst s = new Tekst(listaStringów);
+        listaStringów = s.usuwaZnaczki();
+        listaStringów = s.załatwiaProblemPrzeniesieniaLinii();
+        listaStringów = s.dzieliNaCzytelneWersy();
+        listaStringów = zrobPreprocessing(s, listaStringów);
 
-        List<Fragment> listaFragmentów=new LinkedList<>();
-        Fragment fragment=new Fragment(TypFragmentu.Root, "root", 1);
-        fragment=s.Strukturyzuje();
+        List<Fragment> listaFragmentów = new LinkedList<>();
+        Fragment fragment = new Fragment(TypFragmentu.Root, "root", 1);
+        fragment = s.Strukturyzuje();
         return fragment;
-        }
+    }
+
+    protected abstract List<String> zrobPreprocessing(Tekst s, List<String> listaStringów);
 
     public List<String> WczytujeIListuje() throws IOException {
 
         Path sciezka = Paths.get(coParsujemy);
-        BufferedReader tekst= Files.newBufferedReader(sciezka);
-        List<String> listaStringów=new LinkedList();    //wczytuję tekst do listyStringów
-        for (String line; (line=tekst.readLine()) !=null; listaStringów.add(line));
+        BufferedReader tekst = Files.newBufferedReader(sciezka);
+        List<String> listaStringów = new LinkedList();    //wczytuję tekst do listyStringów
+        for (String line; (line = tekst.readLine()) != null; listaStringów.add(line)) ;
 
-        Plik s=new Plik(listaStringów);
-        listaStringów=s.usuwaZnaczki();
-        listaStringów=s.załatwiaProblemPrzeniesieniaLinii();
-        listaStringów=s.dzieliNaCzytelneWersy();
+        Tekst s = new Tekst(listaStringów);
+        listaStringów = s.usuwaZnaczki();
+        listaStringów = s.załatwiaProblemPrzeniesieniaLinii();
+        listaStringów = s.dzieliNaCzytelneWersy();
 
         return listaStringów;
     }

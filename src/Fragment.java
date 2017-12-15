@@ -35,7 +35,7 @@ public class Fragment {
 
     public void WypiszWgłąb(Fragment fra)
     {
-        System.out.println("| numer: " + fra.numer+" -> "+fra.typ+"|--- "+fra.treść+" ");
+        System.out.println("| numer: " + fra.numer+" -> "+fra.typ+"|--- "+fra.treść+" "); //zwraca stringi!!!!!!!!!!!!!
         for (int i=0; i<fra.lista.size(); i++)
         {
             if (fra.lista.get(i)!=null) WypiszWgłąb(fra.lista.get(i));
@@ -60,16 +60,27 @@ public class Fragment {
                         (fra.treść!=null) &&
                         (fra.treść.length()>3) &&
                        !(fra.treść.substring(0,4).matches("\\p{Lu}"))
-
-
            )
         {
-            if (fra.typ == TypFragmentu.Root)System.out.println("|" + fra.numer + "|---        " + fra.treść + " ");
+            if (fra.typ == TypFragmentu.Root)System.out.println("|" + fra.numer + "|---   ↳" + fra.treść + " ");
             else System.out.println("|" + fra.numer + "|--- " + fra.treść + " ");
         }
         for (int i=0; i<fra.lista.size(); i++)
         {
             if (fra.lista.get(i)!=null) WypiszSpis(fra.lista.get(i));
+        }
+    }
+
+    public void WypiszArtykułyZZakresu(int a, int b, Fragment fra)
+    {
+        if ((fra.typ==TypFragmentu.Artykuł && fra.numer>(a-1) && fra.numer<(b+1))
+                //|| fra.typ==TypFragmentu.Punkt
+                //|| fra.typ==TypFragmentu.Podpunkt
+                )
+        System.out.println("| numer: " + fra.numer+"|--- "+fra.treść+" ");
+        for (int i=0; i<fra.lista.size(); i++)
+        {
+            if (fra.lista.get(i)!=null) WypiszArtykułyZZakresu(a, b, fra.lista.get(i));
         }
     }
 }

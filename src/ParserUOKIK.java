@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.List;
 
 public class ParserUOKIK extends Parser {
 
@@ -10,4 +11,11 @@ public class ParserUOKIK extends Parser {
     {
         return super.WczytujeIPoprawia();
     }
+
+    @Override
+    protected List<String> zrobPreprocessing(Tekst źródło, List<String> stringi) {
+            return źródło.uporczyweArtykuły(); //jesli uokik, to trzeba poradzic sobie z nowym problemem
+
+    }
+
 }

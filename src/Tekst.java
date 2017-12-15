@@ -2,9 +2,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Plik {
+public class Tekst {
     List<String> lista;
-    Plik(List<String> lis)
+    Tekst(List<String> lis)
     {
         lista=lis;
     }
