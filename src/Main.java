@@ -23,15 +23,15 @@ public class Main
         ParserUOKIK uokik = new ParserUOKIK("/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt");
         List<String> u = new LinkedList();
         Fragment fragment2=uokik.WczytujeIPoprawia();
-        fragment2.WypiszWgłąb(fragment2);
-        //fragment.WypiszSpis(fragment);
+        //fragment2.WypiszWgłąb(fragment2);
+        //fragment.WypiszSpis(fragment2);
 
         u=uokik.WczytujeIListuje();
-        /*WYPISUJE*/ for (int i=0; i<u.size(); i++) System.out.println(i+": "+u.get(i));
+        //*WYPISUJE*/ for (int i=0; i<u.size(); i++) System.out.println(i+": "+u.get(i));
 
 
         e=konstytucja.WczytujeIListuje();
         //*WYPISUJE*/ for (int i=0; i<e.size(); i++) System.out.println(i+": "+e.get(i));
 
-    }
+            }
 }

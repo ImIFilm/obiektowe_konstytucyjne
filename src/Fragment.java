@@ -31,6 +31,13 @@ public class Fragment {
         litera = z;
     }
 
+    Fragment(TypFragmentu t, String s, int u, char z) {
+        typ = t;
+        treść = s;
+        litera = z;
+        numer = u;
+    }
+
     Fragment(TypFragmentu t, String s, List<Fragment> l, int o, char z) {
         typ = t;
         treść = s;
@@ -68,8 +75,8 @@ public class Fragment {
                         (fra.treść.length() > 3) &&
                         !(fra.treść.substring(0, 4).matches("\\p{Lu}"))
                 ) {
-            if (fra.typ == TypFragmentu.Root) System.out.println("|" + fra.numer + "|---   ↳" + fra.treść + " ");
-            else System.out.println("|" + fra.numer + "|--- " + fra.treść + " ");
+            if (fra.typ == TypFragmentu.Root) System.out.println(fra.treść + " ");
+            else System.out.println(fra.treść + " ");
         }
         for (int i = 0; i < fra.lista.size(); i++) {
             if (fra.lista.get(i) != null) WypiszSpis(fra.lista.get(i));

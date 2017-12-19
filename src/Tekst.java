@@ -79,7 +79,7 @@ public class Tekst {
                         string.substring(0, 4).equals("DZIA") ||            //rozdział WORKS!
                         string.substring(0, 4).equals("Rozd") ||          //dział WORKS!
                         string.substring(0, 2).matches("\\w\\)") || //wyrażenia jako a) i b)
-                        (string.substring(0, 4).matches("[A-Z]+") &&!(string3.length()<15 &&(string3.substring(0, 4).matches("Rozd")))) ||
+                        (string.substring(0, 4).matches("[A-ZŚĆĄĘŻŹÓŁ]+") &&!(string3.length()<15 &&(string3.substring(0, 4).matches("Rozd")))) ||
                         string.substring(0, 4).equals("ŚROD") ||
                         //string.substring(0, 4).equals("ORGA") ||
                         string.substring(0, 4).equals("REFE") ||
@@ -150,7 +150,7 @@ public class Tekst {
     public Fragment Strukturyzuje()
     {
         Fragment root=new Fragment();
-        Fragment AktualnyRozdział=new Fragment();
+        Fragment AktualnyRozdział=null;//new Fragment();
         Fragment AktualnyArtykuł=null;
         Fragment AktualnyPunkt=null;
         Fragment AktualnyPodpunkt=null;
@@ -165,22 +165,22 @@ public class Tekst {
             Pattern patternArtykułu = Pattern.compile("Art.");
             Matcher matcherArt = patternArtykułu.matcher(lista.get(i));
             Pattern patternPunktu = Pattern.compile("\\d+\\.");
-            Matcher matcherPkt = patternPunktu.matcher(lista.get(i));
+            Matcher matcherPkt;
+            if(lista.get(i).length()>3) matcherPkt = patternPunktu.matcher(lista.get(i).substring(0,3)); //zrobione, zeby sprawdzal
+            else matcherPkt = patternPunktu.matcher(lista.get(i).substring(0,lista.get(i).length())); //tylko poczatek, nigdzie dalej
             Pattern patternPodpunktu = Pattern.compile("\\d+\\)");
             Matcher matcherPpkt = patternPodpunktu.matcher(lista.get(i));
-            Pattern patternDziału = Pattern.compile("DZIAŁ");
+            Pattern patternDziału = Pattern.compile("\\w*DZIAŁ\\w*");
             Matcher matcherDzia = patternDziału.matcher(lista.get(i));
-            Pattern patternUchylenia = Pattern.compile("(uchylony)");
-            Matcher matcherUchylony = patternUchylenia.matcher(lista.get(i));
             Pattern patternLitery = Pattern.compile("\\w\\)");
             Matcher matcherLitery = patternLitery.matcher(lista.get(i));
 
             if(matcherDzia.find()==true)
             {
-                String line = lista.get(i);
-                String pattern = "[XVI][XVI]*[XVI]*[XVI]*";
-                Pattern r = Pattern.compile(pattern);
-                Matcher m = r.matcher(line);
+                String line2 = lista.get(i);
+                String pattern3 = "[XVI][XVI]*[XVI]*[XVI]*";
+                Pattern r = Pattern.compile(pattern3);
+                Matcher m = r.matcher(line2.substring(4));
                 int foo=0;
                 if (m.find( ))
                 {
@@ -204,7 +204,6 @@ public class Tekst {
                         case ("XVI"): foo=16; break;
                         default: {}
                     }
-
                 }
                 else {}
                 Fragment a = new Fragment(TypFragmentu.Dział, lista.get(i), foo);
@@ -213,13 +212,13 @@ public class Tekst {
                 Akt=a;
             }
 
+            int foo=0;
             if(matcherRoz.find()==true) //jesli jest rozdziałem
             {
                 String line = lista.get(i);
                 String pattern = "[XVI][XVI]*[XVI]*[XVI]*";
                 Pattern r = Pattern.compile(pattern);
                 Matcher m = r.matcher(line);
-                int foo=0;
                 if (m.find( ))
                 {
                     switch (m.group(0))
@@ -244,11 +243,18 @@ public class Tekst {
                     }
 
                 }
-                else {}
-                Fragment a = new Fragment(TypFragmentu.Dział, lista.get(i), foo);
+                else
+                {
+                    String line2 = lista.get(i);
+                    String pattern2 = "[1234567890]+";
+                    Pattern r2 = Pattern.compile(pattern2);
+                    Matcher m2 = r2.matcher(line2);
+                    if (m2.find( )) foo=Integer.parseInt(m2.group());
+                }
+                Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i), foo);
                 if (AktualnyDział==null) root.lista.add(a);
                 else AktualnyDział.lista.add(a);
-                AktualnyRozdział=a;
+                if(AktualnyRozdział!=null)AktualnyRozdział=a;
                 Akt=a;
             }
             else if(matcherArt.find()==true) //jesli jest artykułem
@@ -257,20 +263,41 @@ public class Tekst {
                 String pattern = "[1234567890]+";
                 Pattern r = Pattern.compile(pattern);
                 Matcher m = r.matcher(line);
-                int foo=0;
+                foo = 0;
                 if (m.find( )) foo=Integer.parseInt(m.group());
-                Fragment a = new Fragment(TypFragmentu.Artykuł, lista.get(i), foo);
-                AktualnyRozdział.lista.add(a);
+                char znak='-';
+                Pattern q = Pattern.compile("\\d+\\w\\.");
+                Matcher n = q.matcher(line);
+                String s2;
+                if (n.find())
+                {
+                    s2 = new String (n.group());
+                    Pattern u = Pattern.compile("[a-z]");
+                    Matcher w = u.matcher(s2);
+                    if (w.find( )) znak=(w.group()).charAt(0);
+                }
+
+
+                Fragment a = new Fragment(TypFragmentu.Artykuł, lista.get(i), foo, znak);
+                if(AktualnyRozdział!=null)
+                {
+                    AktualnyRozdział.lista.add(a);
+                }
+                else if (AktualnyDział!=null)
+                {
+                    AktualnyDział.lista.add(a);
+                }
+                else root.lista.add(a);
                 AktualnyArtykuł=a;
                 Akt=a;
             }
-            else if(matcherPkt.find()==true) //jesli jest artykułem
+            else if(matcherPkt.find()==true) //jesli jest punktem
             {
                 String line = lista.get(i);
                 String pattern = "[1234567890]+";
                 Pattern r = Pattern.compile(pattern);
                 Matcher m = r.matcher(line);
-                int foo=0;
+                foo=0;
                 if (m.find( )) foo=Integer.parseInt(m.group());
                 Fragment a = new Fragment(TypFragmentu.Punkt, lista.get(i), foo);
                 AktualnyArtykuł.lista.add(a);
@@ -283,7 +310,7 @@ public class Tekst {
                 String pattern = "[1234567890]+";
                 Pattern r = Pattern.compile(pattern);
                 Matcher m = r.matcher(line);
-                int foo=0;
+                foo=0;
                 if (m.find( )) foo=Integer.parseInt(m.group());
                 Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i), foo);
                 AktualnyPunkt.lista.add(a);
@@ -296,11 +323,16 @@ public class Tekst {
                 String pattern = "\\w\\)";
                 Pattern r = Pattern.compile(pattern);
                 Matcher m = r.matcher(line);
-                char foo='a';
-                if (m.find( )) foo=m.group().charAt(0);
-                Fragment a = new Fragment(TypFragmentu.Litera, lista.get(i), (char) foo);
+                char foo2='a';
+                if (m.find( )) foo2=m.group().charAt(0);
+                Fragment a = new Fragment(TypFragmentu.Litera, lista.get(i), (char) foo2);
                 AktualnyPodpunkt.lista.add(a);
                 Akt=a;
+            }
+            else if (lista.get(i).length()>3 && lista.get(i).substring(0,3).equals("a. ")) //specyficznasytuacja dla uokiku
+            {
+                Fragment a = new Fragment (TypFragmentu.Punkt, lista.get(i), 1);
+                Akt.lista.add(a);
             }
             else
             {
