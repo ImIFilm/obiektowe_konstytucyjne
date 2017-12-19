@@ -2,31 +2,31 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Fragment {
-    TypFragmentu typ;
-    String treść;
-    int numer;
-    List<Fragment> lista = new LinkedList<>();
+        TypFragmentu typ;
+        String treść;
+        int numer;
+        List<Fragment> lista = new LinkedList<>();
 
 
-    Fragment (TypFragmentu t, String s, List<Fragment> l, int o)
-    {
-        typ=t;
-        treść=s;
-        lista=l;
-        numer=o;
-    }
+        Fragment (TypFragmentu t, String s, List<Fragment> l, int o)
+        {
+            typ=t;
+            treść=s;
+            lista=l;
+            numer=o;
+        }
 
-    Fragment (TypFragmentu t, String s, int o)
-    {
-        typ=t;
-        treść=s;
-        numer=o;
-    }
+        Fragment (TypFragmentu t, String s, int o)
+        {
+            typ=t;
+            treść=s;
+            numer=o;
+        }
 
-    Fragment()
-    {
-        typ=TypFragmentu.Root;
-    }
+        Fragment()
+        {
+            typ=TypFragmentu.Root;
+        }
 
     @Override
     public String toString() {
@@ -71,16 +71,55 @@ public class Fragment {
         }
     }
 
-    public void WypiszArtykułyZZakresu(int a, int b, Fragment fra)
+
+    public void WypiszArtykułKonstytucji(int a, Fragment fra)
     {
-        if ((fra.typ==TypFragmentu.Artykuł && fra.numer>(a-1) && fra.numer<(b+1))
-                //|| fra.typ==TypFragmentu.Punkt
-                //|| fra.typ==TypFragmentu.Podpunkt
-                )
-        System.out.println("| numer: " + fra.numer+"|--- "+fra.treść+" ");
         for (int i=0; i<fra.lista.size(); i++)
         {
-            if (fra.lista.get(i)!=null) WypiszArtykułyZZakresu(a, b, fra.lista.get(i));
+            for (int j=0; j<fra.lista.get(i).lista.size(); j++)
+            {
+                if (fra.lista.get(i).lista.get(j).typ==TypFragmentu.Artykuł && fra.lista.get(i).lista.get(j).numer==a)
+                {
+                    WypiszWgłąb(fra.lista.get(i).lista.get(j));
+                }
+            }
+        }
+    }
+
+    public void WypiszArtykułKonstytucjiZZakresu(int a, int b, Fragment fra)
+    {
+        for (int i=0; i<fra.lista.size(); i++)
+        {
+            for (int j=0; j<fra.lista.get(i).lista.size(); j++)
+            {
+                if (fra.lista.get(i).lista.get(j).typ==TypFragmentu.Artykuł && fra.lista.get(i).lista.get(j).numer>a-1 &&
+                        fra.lista.get(i).lista.get(j).numer<b+1)
+                {
+                    WypiszWgłąb(fra.lista.get(i).lista.get(j));
+                }
+            }
+        }
+    }
+
+    public void WypiszRozdziałKonstytucji(int a, Fragment fra)
+    {
+        for (int j=0; j<fra.lista.size(); j++)
+        {
+            if (fra.lista.get(j).typ==TypFragmentu.Rozdział && fra.lista.get(j).numer==a)
+            {
+                WypiszWgłąb(fra.lista.get(j));
+            }
+        }
+    }
+
+    public void WypiszRozdziałKonstytucjiZZakresu(int a, int b, Fragment fra)
+    {
+        for (int j=0; j<fra.lista.size(); j++)
+        {
+            if (fra.lista.get(j).typ==TypFragmentu.Rozdział && fra.lista.get(j).numer>=a && fra.lista.get(j).numer<=b)
+            {
+                WypiszWgłąb(fra.lista.get(j));
+            }
         }
     }
 }

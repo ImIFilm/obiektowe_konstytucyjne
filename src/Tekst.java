@@ -115,19 +115,20 @@ public class Tekst {
             if (string.length()>4 && string.substring(0, 4).equals("Art."))
             {
                 string2=string.substring(4);
-                for (int j = 0; j<9; j++)
+                for (int j = 1; j<9; j++)
                 {
-                    if (string2.charAt(j)=='.' && (string.charAt(j-1)=='0' || string.charAt(j-1)=='1' || string.charAt(j-1)=='2' || string.charAt(j-1)=='3' ||
+                    if (string2.length()>8 && string.length()>8 &&
+                            string2.charAt(j)=='.' && (string.charAt(j-1)=='0' || string.charAt(j-1)=='1' || string.charAt(j-1)=='2' || string.charAt(j-1)=='3' ||
                         string.charAt(j-1)=='4' || string.charAt(j-1)=='5' || string.charAt(j-1)=='6' || string.charAt(j-1)=='7' || string.charAt(j-1)=='8' ||
                         string.charAt(j-1)=='9'))
                     {
-                        String string3=new String();
-                        String string4=new String();
-                        string3="Art."+string2.substring(0, j-1);
-                        lista.set(i, string3);
-                        string4=string2.substring(j-1);
-                        lista.add(i+1, string4);
-                        j++;
+                            String string3=new String();
+                            String string4=new String();
+                            string3="Art."+string2.substring(0, j-1);
+                            lista.set(i, string3);
+                            string4=string2.substring(j-1);
+                            lista.add(i+1, string4);
+                            j++;
                     }
                 }
             }
@@ -142,6 +143,7 @@ public class Tekst {
         Fragment AktualnyRozdział=null;
         Fragment AktualnyArtykuł=null;
         Fragment AktualnyPunkt=null;
+        Fragment AktualnyDział=null;
         Fragment Akt=root;
 
 
@@ -155,7 +157,12 @@ public class Tekst {
             Matcher matcherPkt = patternPunktu.matcher(lista.get(i));
             Pattern patternPodpunktu = Pattern.compile("\\d+\\)");
             Matcher matcherPpkt = patternPodpunktu.matcher(lista.get(i));
-            if(matcherRoz.find()==true) //jesli jest rozdziałem
+            Pattern patternDziału = Pattern.compile("DZIAŁ");
+            Matcher matcherDzia = patternPodpunktu.matcher(lista.get(i));
+            Pattern patternUchylenia = Pattern.compile("(uchylony)");
+            Matcher matcherUchylony = patternUchylenia.matcher(lista.get(i));
+
+            if(matcherDzia.find()==true)
             {
                 String line = lista.get(i);
                 String pattern = "[XVI][XVI]*[XVI]*[XVI]*";
@@ -189,6 +196,45 @@ public class Tekst {
                 else {}
                 Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i), foo);
                 root.lista.add(a);
+                AktualnyRozdział=a;
+                Akt=a;
+            }
+
+            if(matcherRoz.find()==true) //jesli jest rozdziałem
+            {
+                String line = lista.get(i);
+                String pattern = "[XVI][XVI]*[XVI]*[XVI]*";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(line);
+                int foo=0;
+                if (m.find( ))
+                {
+                    switch (m.group(0))
+                    {
+                        case ("I"): foo=1; break;
+                        case ("II"): foo=2; break;
+                        case ("III"): foo=3; break;
+                        case ("IV"): foo=4; break;
+                        case ("V"): foo=5; break;
+                        case ("VI"): foo=6; break;
+                        case ("VII"): foo=7; break;
+                        case ("VIII"): foo=8; break;
+                        case ("IX"): foo=9; break;
+                        case ("X"): foo=10; break;
+                        case ("XI"): foo=11; break;
+                        case ("XII"): foo=12; break;
+                        case ("XIII"): foo=13; break;
+                        case ("XIV"): foo=14; break;
+                        case ("XV"): foo=15; break;
+                        case ("XVI"): foo=16; break;
+                        default: {}
+                    }
+
+                }
+                else {}
+                Fragment a = new Fragment(TypFragmentu.Dział, lista.get(i), foo);
+                if (AktualnyDział==null) root.lista.add(a);
+                else AktualnyDział.lista.add(a);
                 AktualnyRozdział=a;
                 Akt=a;
             }
@@ -229,6 +275,10 @@ public class Tekst {
                 Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i), foo);
                 AktualnyPunkt.lista.add(a);
                 Akt=a;
+            }
+            else if (matcherUchylony.find()==true)
+            {
+
             }
             else
             {

@@ -48,6 +48,7 @@ abstract class Parser {
         listaStringów = s.usuwaZnaczki();
         listaStringów = s.załatwiaProblemPrzeniesieniaLinii();
         listaStringów = s.dzieliNaCzytelneWersy();
+        listaStringów = s.uporczyweArtykuły();
 
         return listaStringów;
     }
