@@ -78,7 +78,7 @@ public class Tekst {
                         string.substring(0, 3).matches("\\d+[.)]") ||  //j.w. WORKS!
                         string.substring(0, 4).equals("DZIA") ||            //rozdział WORKS!
                         string.substring(0, 4).equals("Rozd") ||          //dział WORKS!
-                        string.substring(0, 1).matches("\\w[)]") || //wyrażenia jako a) i b)
+                        string.substring(0, 2).matches("\\w\\)") || //wyrażenia jako a) i b)
                         (string.substring(0, 4).matches("[A-Z]+") &&!(string3.length()<15 &&(string3.substring(0, 4).matches("Rozd")))) ||
                         string.substring(0, 4).equals("ŚROD") ||
                         //string.substring(0, 4).equals("ORGA") ||
@@ -112,25 +112,35 @@ public class Tekst {
         for (int i=0; i<lista.size(); i++)
         {
             string=lista.get(i);
-            if (string.length()>4 && string.substring(0, 4).equals("Art."))
+            if (string.length()>3 && string.substring(0, 4).equals("Art."))
             {
                 string2=string.substring(4);
-                for (int j = 1; j<9; j++)
+                for (int j = 0; j<9; j++)
                 {
-                    if (string2.length()>8 && string.length()>8 &&
-                            string2.charAt(j)=='.' && (string.charAt(j-1)=='0' || string.charAt(j-1)=='1' || string.charAt(j-1)=='2' || string.charAt(j-1)=='3' ||
+                    if (string2.length()>7 && string.length()>7 &&
+                            (string2.charAt(j)=='.' && (string.charAt(j-1)=='0' || string.charAt(j-1)=='1' || string.charAt(j-1)=='2' || string.charAt(j-1)=='3' ||
                         string.charAt(j-1)=='4' || string.charAt(j-1)=='5' || string.charAt(j-1)=='6' || string.charAt(j-1)=='7' || string.charAt(j-1)=='8' ||
-                        string.charAt(j-1)=='9'))
+                        string.charAt(j-1)=='9')))
                     {
-                            String string3=new String();
-                            String string4=new String();
-                            string3="Art."+string2.substring(0, j-1);
-                            lista.set(i, string3);
-                            string4=string2.substring(j-1);
-                            lista.add(i+1, string4);
-                            j++;
+                        String string3=new String();
+                        String string4=new String();
+                        string3="Art."+string2.substring(0, j-1);
+                        lista.set(i, string3);
+                        string4=string2.substring(j-1);
+                        lista.add(i+1, string4);
+                        j++;
                     }
                 }
+            }
+        }
+        for (int i=0; i<lista.size(); i++)
+        {
+            Pattern patternUchylenia= Pattern.compile("\\(uchylony\\)");
+            Matcher matcherU = patternUchylenia.matcher(lista.get(i));
+            if (matcherU.find())
+            {
+                lista.remove(i);
+                i--;
             }
         }
         return lista;
@@ -140,9 +150,10 @@ public class Tekst {
     public Fragment Strukturyzuje()
     {
         Fragment root=new Fragment();
-        Fragment AktualnyRozdział=null;
+        Fragment AktualnyRozdział=new Fragment();
         Fragment AktualnyArtykuł=null;
         Fragment AktualnyPunkt=null;
+        Fragment AktualnyPodpunkt=null;
         Fragment AktualnyDział=null;
         Fragment Akt=root;
 
@@ -158,9 +169,11 @@ public class Tekst {
             Pattern patternPodpunktu = Pattern.compile("\\d+\\)");
             Matcher matcherPpkt = patternPodpunktu.matcher(lista.get(i));
             Pattern patternDziału = Pattern.compile("DZIAŁ");
-            Matcher matcherDzia = patternPodpunktu.matcher(lista.get(i));
+            Matcher matcherDzia = patternDziału.matcher(lista.get(i));
             Pattern patternUchylenia = Pattern.compile("(uchylony)");
             Matcher matcherUchylony = patternUchylenia.matcher(lista.get(i));
+            Pattern patternLitery = Pattern.compile("\\w\\)");
+            Matcher matcherLitery = patternLitery.matcher(lista.get(i));
 
             if(matcherDzia.find()==true)
             {
@@ -194,9 +207,9 @@ public class Tekst {
 
                 }
                 else {}
-                Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i), foo);
+                Fragment a = new Fragment(TypFragmentu.Dział, lista.get(i), foo);
                 root.lista.add(a);
-                AktualnyRozdział=a;
+                AktualnyDział=a;
                 Akt=a;
             }
 
@@ -274,11 +287,20 @@ public class Tekst {
                 if (m.find( )) foo=Integer.parseInt(m.group());
                 Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i), foo);
                 AktualnyPunkt.lista.add(a);
+                AktualnyPodpunkt=a;
                 Akt=a;
             }
-            else if (matcherUchylony.find()==true)
+            else if (matcherLitery.find()==true)
             {
-
+                String line = lista.get(i);
+                String pattern = "\\w\\)";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(line);
+                char foo='a';
+                if (m.find( )) foo=m.group().charAt(0);
+                Fragment a = new Fragment(TypFragmentu.Litera, lista.get(i), (char) foo);
+                AktualnyPodpunkt.lista.add(a);
+                Akt=a;
             }
             else
             {
