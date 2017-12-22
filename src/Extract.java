@@ -137,7 +137,8 @@ public class Extract {
     {
         //try {DeepPreview(fra.ChildOfNumber( b));}
         //catch (NullPointerException e) {}
-        if (fra.type == ExtractType.Article && fra.number ==a) DeepPreview(fra.ChildOfNumber( b));
+        if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber( b)!=null) DeepPreview(fra.ChildOfNumber( b));
+        else if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber( b)==null) System.out.println("Nie ma takiego ustępu");
         else {
             for (int i = 0; i < fra.list.size(); i++) {
                 if (fra.list.get(i) != null) ShowSpecificSection(a, b, fra.list.get(i));
@@ -149,7 +150,10 @@ public class Extract {
     {
         //try {DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c));}
         //catch (NullPointerException e) {}
-        if (fra.type == ExtractType.Article && fra.number ==a) DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c));
+        if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber(b)!=null && fra.ChildOfNumber(b).ChildOfNumber(c)!=null)
+            DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c));
+        else if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber( b)==null) System.out.println("Nie ma takiego ustępu");
+        else if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber(b)!=null && fra.ChildOfNumber(b).ChildOfNumber(c)==null) System.out.println("Nie ma takiego punktu");
         else {
             for (int i = 0; i < fra.list.size(); i++) {
                 if (fra.list.get(i) != null) ShowSpecificPoint(a, b, c, fra.list.get(i));
@@ -161,8 +165,12 @@ public class Extract {
     {
         //try {DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c).ChildOfSign(d));}
         //catch (NullPointerException e) {}
-        if (fra.type == ExtractType.Article && fra.number ==a)
+        if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber(b)!=null
+            && fra.ChildOfNumber(b).ChildOfNumber(c)!=null && fra.ChildOfNumber(b).ChildOfNumber(c).ChildOfSign(d)!=null)
             DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c).ChildOfSign(d));
+        else if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber( b)==null) System.out.println("Nie ma takiego ustępu");
+        else if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber(b)!=null && fra.ChildOfNumber(b).ChildOfNumber(c)==null) System.out.println("Nie ma takiego punktu");
+        else if (fra.type == ExtractType.Article && fra.number ==a && fra.ChildOfNumber(b)!=null && fra.ChildOfNumber(b).ChildOfNumber(c)!=null && fra.ChildOfNumber(b).ChildOfNumber(c).ChildOfSign(d)==null) System.out.println("Nie ma takiej litery!");
         else {
             for (int i = 0; i < fra.list.size(); i++) {
                 if (fra.list.get(i) != null) ShowSpecificSign(a, b, c, d, fra.list.get(i));

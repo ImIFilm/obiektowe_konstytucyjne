@@ -6,9 +6,11 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        System.out.println("----PROGRAM----\n\nDomyślne lokalizacje naszych plików");
-        System.out.println("KONSTYTUCJA:  /Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt\nUOKIK:        /Users/ImI/IdeaProjects/konstytucja/src/uokik.txt");
-        System.out.println("Wpisz ścieżkę do pliku:");
+        //System.out.println("----PROGRAM----\n\nDomyślne lokalizacje naszych plików");
+        //System.out.println("KONSTYTUCJA:  /Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt\nUOKIK:        /Users/ImI/IdeaProjects/konstytucja/src/uokik.txt");
+        System.out.println("ŚCIEŻKA DO PLIKU MOŻE WYGLĄDAĆ TAK: \n/Users/user4/IdeaProjects/konstytucja/src/konstytucja.txt/Users/user4/IdeaProjects/konstytucja/src/konstytucja.txt");
+        System.out.println("\nWpisz ścieżkę do pliku:");
+
         //wczytujemy siezke
         String sciezka;
         Scanner odczyt = new Scanner(System.in);
