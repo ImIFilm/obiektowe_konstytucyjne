@@ -10,6 +10,8 @@ Bardzo dużo się nauczyłem, wiele zrozumiałem.
 Z perspektywy dziś uważam, że wiele rzeczy można było zrobić znacznie wydajniej, lepiej itd.
 Jednak wiem, że na końcowym etapie zmiana koncepcji kosztowałaby mnie kolejne 30h pracy, a ten czas chciałbym jednak w święta poświęcić rodzinie, bo uważam że tego potrzebuję.
 
+jest krótkie wiki do projektu na GitHubie
+
 Życzę udanych świąt!
 Piotr Kędziora
 grupa piątkowa 14:40
