@@ -7,13 +7,13 @@ public class ParserUOKIK extends Parser {
         super(co);
     }
 
-    public Extract WczytujeIPoprawia() throws IOException
+    public Extract CreateAndImprove() throws IOException
     {
-        return super.WczytujeIPoprawia();
+        return super.CreateAndImprove();
     }
 
     @Override
-    protected List<String> zrobPreprocessing(Tekst źródło, List<String> stringi) {
+    protected List<String> doPreprocessing(Tekst źródło, List<String> stringi) {
             return źródło.uporczyweArtykuły(); //jesli uokik, to trzeba poradzic sobie z nowym problemem
 
     }

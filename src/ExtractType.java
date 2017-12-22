@@ -3,7 +3,7 @@ public enum ExtractType {
     Section,
     Point,
     Sign,
-    Dział,
-    Rozdział,
+    Unit,
+    Chapter,
     Root
 }

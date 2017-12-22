@@ -14,7 +14,7 @@ abstract class Parser {
         coParsujemy = co;
     }
 
-    public boolean CzyKonstytucja() throws IOException {
+    public boolean IsConstitution() throws IOException {
         try {
             Path sciezka = Paths.get(coParsujemy);
             BufferedReader tekst = Files.newBufferedReader(sciezka);
@@ -40,7 +40,7 @@ abstract class Parser {
     }
 
 
-    public Extract WczytujeIPoprawia() throws IOException {
+    public Extract CreateAndImprove() throws IOException {
         //String string=new String();
         //if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
         //else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
@@ -55,17 +55,17 @@ abstract class Parser {
         }
         Path sciezka = Paths.get(coParsujemy);
         BufferedReader tekst = Files.newBufferedReader(sciezka);
-        List<String> listaStringów = new LinkedList();    //wczytuję tekst do listyStringów
-        for (String line; (line = tekst.readLine()) != null; listaStringów.add(line)) ;
+        List<String> stringList = new LinkedList();    //wczytuję tekst do listyStringów
+        for (String line; (line = tekst.readLine()) != null; stringList.add(line)) ;
 
 
-        Tekst s = new Tekst(listaStringów);
-        listaStringów = s.usuwaZnaczki();
-        listaStringów = s.załatwiaProblemPrzeniesieniaLinii();
-        listaStringów = s.dzieliNaCzytelneWersy();
-        listaStringów = zrobPreprocessing(s, listaStringów);
+        Tekst s = new Tekst(stringList);
+        stringList = s.removesBadSignes();
+        stringList = s.SolveNewLineProblem();
+        stringList = s.CreateReadableLines();
+        stringList = doPreprocessing(s, stringList);
 
-        List<Extract> listaFragmentów = new LinkedList<>();
+        List<Extract> fragmentList = new LinkedList<>();
         Extract extract = new Extract(ExtractType.Root, "root", 1);
         extract = s.Strukturyzuje();
         return extract;
@@ -73,22 +73,22 @@ abstract class Parser {
 
     }
 
-    protected abstract List<String> zrobPreprocessing(Tekst s, List<String> listaStringów);
+    protected abstract List<String> doPreprocessing(Tekst s, List<String> listaStringów);
 
-    public List<String> WczytujeIListuje() throws IOException {
+    public List<String> ReadAndList() throws IOException {
 
         Path sciezka = Paths.get(coParsujemy);
         BufferedReader tekst = Files.newBufferedReader(sciezka);
-        List<String> listaStringów = new LinkedList();    //wczytuję tekst do listyStringów
-        for (String line; (line = tekst.readLine()) != null; listaStringów.add(line)) ;
+        List<String> stringList = new LinkedList();    //wczytuję tekst do listyStringów
+        for (String line; (line = tekst.readLine()) != null; stringList.add(line)) ;
 
-        Tekst s = new Tekst(listaStringów);
-        listaStringów = s.usuwaZnaczki();
-        listaStringów = s.załatwiaProblemPrzeniesieniaLinii();
-        listaStringów = s.dzieliNaCzytelneWersy();
-        listaStringów = s.uporczyweArtykuły();
+        Tekst s = new Tekst(stringList);
+        stringList = s.removesBadSignes();
+        stringList = s.SolveNewLineProblem();
+        stringList = s.CreateReadableLines();
+        stringList = s.uporczyweArtykuły();
 
-        return listaStringów;
+        return stringList;
     }
 
 }

@@ -46,31 +46,23 @@ public class Extract {
         sign = z;
     }
 
-
     @Override
     public String toString() {
         return content;
     }
 
     public void DeepPreview(Extract fra) {
-        System.out.println("| number: " + fra.number + fra.sign + " -> " + fra.type + "|--- " + fra.content + " ");
+        //try{System.out.println("NUMER:" + fra.number + " ZNAK:"+fra.sign + " TYP:" + fra.type + "||| " + fra.content);}
+        //catch (NullPointerException e) {}
+        System.out.println("NUMER:" + fra.number + " ZNAK:"+fra.sign + " TYP:" + fra.type + "||| " + fra.content);
         for (int i = 0; i < fra.list.size(); i++) {
             if (fra.list.get(i) != null) DeepPreview(fra.list.get(i));
         }
     }
 
-    public void WypiszArtykuły(Extract fra) {
-        if (fra.type == ExtractType.Article) {
-            System.out.println("|" + fra.number + fra.sign + "|--- " + fra.content + " ");
-        }
-        for (int i = 0; i < fra.list.size(); i++) {
-            if (fra.list.get(i) != null) WypiszArtykuły(fra.list.get(i));
-        }
-    }
-
     public void ShowTableOfContent(Extract fra) {
         if (
-                (fra.type == ExtractType.Rozdział || fra.type == ExtractType.Root) &&
+                (fra.type == ExtractType.Chapter || fra.type == ExtractType.Root) &&
                         (fra.content != null) &&
                         (fra.content.length() > 3) &&
                         !(fra.content.substring(0, 4).matches("\\p{Lu}"))
@@ -95,23 +87,6 @@ public class Extract {
     }
 */
 
-    public void ShowSpecificSection(int a, int b, Extract fra, ExtractType typek)
-    {
-        if (fra.type ==typek && fra.number ==a) {
-            if (fra.type == ExtractType.Section && fra.number ==b) System.out.println(fra);
-            else {
-                for (int i = 0; i < fra.list.size(); i++) {
-                    if (fra.list.get(i) != null) ShowSpecificSection(a, b, fra.list.get(i), ExtractType.Section);
-                }
-            }
-        }
-        else {
-            for (int i = 0; i < fra.list.size(); i++) {
-                if (fra.list.get(i) != null) ShowSpecificSection(a, b, fra.list.get(i), ExtractType.Article);
-            }
-        }
-    }
-
     public void ShowSpecificArticle(int a, Extract fra)
     {
         if (fra.type == ExtractType.Article && fra.number ==a) DeepPreview(fra);
@@ -132,139 +107,72 @@ public class Extract {
         }
     }
 
-    /*
-    public void ShowSpecificSection (int a, int b, Extract fra)
+
+    public void ShowArticlesFromTo(int a, int b, Extract fra)
     {
-        if (fra.type==ExtractType.Article && fra.number==a)
-            if(fra.UzyskajTyp(b, fra)!=null)
-                DeepPreview(fra.UzyskajTyp(b, fra));
+        if (fra.type == ExtractType.Article && fra.number >=a && fra.number<=b) DeepPreview(fra);
+        for (int i = 0; i < fra.list.size(); i++) {
+            if (fra.list.get(i) != null) ShowArticlesFromTo(a, b, fra.list.get(i));
+        }
+    }
+
+    public Extract ChildOfNumber(int a){
+        for (int i=0; i<list.size(); i++)
+        {
+            if(list!=null && list.get(i)!=null && list.get(i).number==a) return list.get(i);
+        }
+        return null;
+    }
+
+    public Extract ChildOfSign(char a){
+        for (int i=0; i<list.size(); i++)
+        {
+            if(list!=null && list.get(i)!=null && list.get(i).sign==a) return list.get(i);
+        }
+        return null;
+    }
+
+
+    public void ShowSpecificSection(int a, int b, Extract fra)
+    {
+        //try {DeepPreview(fra.ChildOfNumber( b));}
+        //catch (NullPointerException e) {}
+        if (fra.type == ExtractType.Article && fra.number ==a) DeepPreview(fra.ChildOfNumber( b));
         else {
             for (int i = 0; i < fra.list.size(); i++) {
                 if (fra.list.get(i) != null) ShowSpecificSection(a, b, fra.list.get(i));
             }
         }
     }
-*/
-    public Extract UzyskajTyp (int a, Extract fra)
+
+    public void ShowSpecificPoint(int a, int b, int c, Extract fra)
     {
-        for (int i = 0; i < fra.list.size(); i++) {
-            if (fra.list.get(i).number ==a) return fra.list.get(i);
-            }
-        return null;
-    }
-
-
-
-    public void WypiszCoWeSciezce(int art, int pkt, Extract fra) {
-        for (int i = 0; i < fra.list.size(); i++) {
-            for (int j = 0; j < fra.list.get(i).list.size(); j++) {
-                //POZIOM ARTYKUŁU
-                if (fra.list.get(i).list.get(j).type == ExtractType.Article && fra.list.get(i).list.get(j).number > art - 1 &&
-                        fra.list.get(i).list.get(j).number < art + 1) {
-                    for (int k = 0; k < fra.list.get(i).list.get(j).list.size(); k++) {
-                        //POZIOM PUNKTU
-                        if (fra.list.get(i).list.get(j).list.get(k).type == ExtractType.Section &&
-                                fra.list.get(i).list.get(j).list.get(k).number == pkt)
-                            DeepPreview(fra.list.get(i).list.get(j).list.get(k));
-                    }
-                }
-            }
-        }
-    }
-
-    public void WypiszCoWeSciezce(int art, int pkt, int ppkt, Extract fra) {
-        for (int i = 0; i < fra.list.size(); i++) {
-            for (int j = 0; j < fra.list.get(i).list.size(); j++) {
-                //POZIOM ARTYKUŁU
-                if (fra.list.get(i).list.get(j).type == ExtractType.Article && fra.list.get(i).list.get(j).number > art - 1 &&
-                        fra.list.get(i).list.get(j).number < art + 1) {
-                    for (int k = 0; k < fra.list.get(i).list.get(j).list.size(); k++) {
-                        //POZIOM PUNKTU
-                        if (fra.list.get(i).list.get(j).list.get(k).type == ExtractType.Section &&
-                                fra.list.get(i).list.get(j).list.get(k).number == pkt)
-                        {
-                            for (int l = 0; l < fra.list.get(i).list.get(j).list.get(k).list.size(); l++) {
-                                //POZIOM PODPUNKTU
-                                if (fra.list.get(i).list.get(j).list.get(k).list.get(l).type == ExtractType.Point &&
-                                        fra.list.get(i).list.get(j).list.get(k).list.get(l).number == ppkt)
-                                    DeepPreview(fra.list.get(i).list.get(j).list.get(k).list.get(l));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-
-    public void WypiszCoWeSciezce(int art, int pkt, int ppkt, char litera, Extract fra) {
-        for (int i = 0; i < fra.list.size(); i++) {
-            for (int j = 0; j < fra.list.get(i).list.size(); j++) {
-                //POZIOM ARTYKUŁU
-                if (fra.list.get(i).list.get(j).type == ExtractType.Article && fra.list.get(i).list.get(j).number > art - 1 &&
-                        fra.list.get(i).list.get(j).number < art + 1) {
-                    for (int k = 0; k < fra.list.get(i).list.get(j).list.size(); k++) {
-                        //POZIOM PUNKTU
-                        if (fra.list.get(i).list.get(j).list.get(k).type == ExtractType.Section &&
-                                fra.list.get(i).list.get(j).list.get(k).number == pkt)
-
-                        {
-                            for (int l = 0; l < fra.list.get(i).list.get(j).list.get(k).list.size(); l++) {
-                                //POZIOM PODPUNKTU
-                                if (fra.list.get(i).list.get(j).list.get(k).list.get(l).type == ExtractType.Point &&
-                                        fra.list.get(i).list.get(j).list.get(k).list.get(l).number == ppkt) {
-                                    for (int m = 0; m < fra.list.get(i).list.get(j).list.get(k).list.get(l).list.size(); m++) {
-                                        //POZIOM PODPUNKTU
-                                        if (fra.list.get(i).list.get(j).list.get(k).list.get(l).list.get(m).type == ExtractType.Sign &&
-                                                fra.list.get(i).list.get(j).list.get(k).list.get(l).list.get(m).sign == litera)
-                                            DeepPreview(fra.list.get(i).list.get(j).list.get(k).list.get(l).list.get(m));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void ZAKRESWypiszArtykuły(int a, int b, Extract fra)
-    {
-        if (fra.type == ExtractType.Article && fra.number >=a && fra.number<=b) DeepPreview(fra);
-
+        //try {DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c));}
+        //catch (NullPointerException e) {}
+        if (fra.type == ExtractType.Article && fra.number ==a) DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c));
+        else {
             for (int i = 0; i < fra.list.size(); i++) {
-                if (fra.list.get(i) != null) ZAKRESWypiszArtykuły(a, b, fra.list.get(i));
-            }
-
-    }
-
-    /*public void WypiszArtykuły2(int a, int b, Extract fra) {
-        for (int i = 0; i < fra.list.size(); i++) {
-            for (int j = 0; j < fra.list.get(i).list.size(); j++) {
-                if (fra.list.get(i).list.get(j).type == ExtractType.Article && fra.list.get(i).list.get(j).number > a - 1 &&
-                        fra.list.get(i).list.get(j).number < b + 1) {
-                    DeepPreview(fra.list.get(i).list.get(j));
-                }
+                if (fra.list.get(i) != null) ShowSpecificPoint(a, b, c, fra.list.get(i));
             }
         }
-    }*/
+    }
 
-    public void WypiszArtykuły(int a, int b, Extract fra, char znak) {
-        System.out.print(znak);
-        for (int i = 0; i < fra.list.size(); i++) {
-            for (int j = 0; j < fra.list.get(i).list.size(); j++) {
-                if ((fra.list.get(i).list.get(j).type == ExtractType.Article) && (fra.list.get(i).list.get(j).number > (a - 1)) &&
-                        (fra.list.get(i).list.get(j).number < (b + 1)) &&
-                        (fra.list.get(i).list.get(j).sign == znak)) {
-                    DeepPreview(fra.list.get(i).list.get(j));
-                }
+    public void ShowSpecificSign(int a, int b, int c, char d, Extract fra)
+    {
+        //try {DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c).ChildOfSign(d));}
+        //catch (NullPointerException e) {}
+        if (fra.type == ExtractType.Article && fra.number ==a)
+            DeepPreview(fra.ChildOfNumber(b).ChildOfNumber(c).ChildOfSign(d));
+        else {
+            for (int i = 0; i < fra.list.size(); i++) {
+                if (fra.list.get(i) != null) ShowSpecificSign(a, b, c, d, fra.list.get(i));
             }
         }
     }
 
     public void WypiszRozdziałKonstytucji(int a, Extract fra) {
         for (int j = 0; j < fra.list.size(); j++) {
-            if (fra.list.get(j).type == ExtractType.Rozdział && fra.list.get(j).number == a) {
+            if (fra.list.get(j).type == ExtractType.Chapter && fra.list.get(j).number == a) {
                 DeepPreview(fra.list.get(j));
             }
         }
@@ -272,8 +180,28 @@ public class Extract {
 
     public void WypiszRozdziałKonstytucjiZZakresu(int a, int b, Extract fra) {
         for (int j = 0; j < fra.list.size(); j++) {
-            if (fra.list.get(j).type == ExtractType.Rozdział && fra.list.get(j).number >= a && fra.list.get(j).number <= b) {
+            if (fra.list.get(j).type == ExtractType.Chapter && fra.list.get(j).number >= a && fra.list.get(j).number <= b) {
                 DeepPreview(fra.list.get(j));
+            }
+        }
+    }
+
+    public void ShowSpecificChapter(int a, Extract fra)
+    {
+        if (fra.type == ExtractType.Chapter && fra.number ==a) fra.DeepPreview(fra);
+        else {
+            for (int i = 0; i < fra.list.size(); i++) {
+                if (fra.list.get(i) != null) fra.ShowSpecificChapter(a, fra.list.get(i));
+            }
+        }
+    }
+
+    public void ShowSpecificChapterFromUnit(int a, int unit, Extract fra)
+    {
+        if (fra.type == ExtractType.Unit && fra.number ==unit) fra.DeepPreview(fra.ChildOfNumber(a));
+        else {
+            for (int i = 0; i < fra.list.size(); i++) {
+                if (fra.list.get(i) != null) fra.ShowSpecificChapterFromUnit(a, unit, fra.list.get(i));
             }
         }
     }

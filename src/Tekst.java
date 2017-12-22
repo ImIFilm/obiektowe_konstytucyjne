@@ -13,7 +13,7 @@ public class Tekst {
         return lista;
     }
 
-    public List<String> usuwaZnaczki(){
+    public List<String> removesBadSignes(){
         lista.remove(0);
         for (int i=0; i<lista.size(); i++)
         {
@@ -40,7 +40,7 @@ public class Tekst {
         return lista;
     }
 
-    public List<String> załatwiaProblemPrzeniesieniaLinii()
+    public List<String> SolveNewLineProblem()
     {
         for (int i=0; i<lista.size(); i++) //a może lepiej przez isEmpty>
         {
@@ -62,7 +62,7 @@ public class Tekst {
         return lista;
     }
     
-    public List<String> dzieliNaCzytelneWersy()
+    public List<String> CreateReadableLines()
     {
         for (int i=0; i<lista.size()-1; i++)
         {
@@ -206,7 +206,7 @@ public class Tekst {
                     }
                 }
                 else {}
-                Extract a = new Extract(ExtractType.Dział, lista.get(i), foo);
+                Extract a = new Extract(ExtractType.Unit, lista.get(i), foo);
                 root.list.add(a);
                 AktualnyDział=a;
                 Akt=a;
@@ -251,10 +251,11 @@ public class Tekst {
                     Matcher m2 = r2.matcher(line2);
                     if (m2.find( )) foo=Integer.parseInt(m2.group());
                 }
-                Extract a = new Extract(ExtractType.Rozdział, lista.get(i), foo);
+                Extract a = new Extract(ExtractType.Chapter, lista.get(i), foo);
                 if (AktualnyDział==null) root.list.add(a);
                 else AktualnyDział.list.add(a);
-                if(AktualnyRozdział!=null)AktualnyRozdział=a;
+                //if(AktualnyRozdział!=null)
+                    AktualnyRozdział=a;
                 Akt=a;
             }
             else if(matcherArt.find()==true) //jesli jest artykułem
