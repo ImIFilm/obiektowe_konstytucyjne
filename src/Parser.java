@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
@@ -13,15 +14,50 @@ abstract class Parser {
         coParsujemy = co;
     }
 
-    public Fragment WczytujeIPoprawia() throws IOException {
-        //String string=new String();
-        //if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
-        //else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
+    public boolean CzyKonstytucja() throws IOException {
+        try {
+            Path sciezka = Paths.get(coParsujemy);
+            BufferedReader tekst = Files.newBufferedReader(sciezka);
+        }
+        catch (NoSuchFileException e)
+        {
+            System.out.println("nie ma takiego pliku, uruchom program jeszcze raz i wpisz poprawną ścieżkę");
+            System.exit(10);
+        }
+        catch (IOException e)
+        {
+            System.out.println("błąd wejścia/wyjścia");
+            System.exit(11);
+        }
 
         Path sciezka = Paths.get(coParsujemy);
         BufferedReader tekst = Files.newBufferedReader(sciezka);
         List<String> listaStringów = new LinkedList();    //wczytuję tekst do listyStringów
+        tekst.readLine();
+        tekst.readLine();
+        if (tekst.readLine().matches("KONSTYTUCJA")) return true;
+        return false;
+    }
+
+
+    public Extract WczytujeIPoprawia() throws IOException {
+        //String string=new String();
+        //if (coParsujemy.equals("konstytucja")) string="/Users/ImI/IdeaProjects/konstytucja/src/konstytucja.txt";
+        //else string="/Users/ImI/IdeaProjects/konstytucja/src/uokik.txt";
+        try {
+            Path sciezka = Paths.get(coParsujemy);
+            BufferedReader tekst = Files.newBufferedReader(sciezka);
+        }
+        catch (NoSuchFileException e)
+        {
+            System.out.println("nie ma takiego pliku, uruchom program jeszcze raz i wpisz poprawną ścieżkę");
+            System.exit(10);
+        }
+        Path sciezka = Paths.get(coParsujemy);
+        BufferedReader tekst = Files.newBufferedReader(sciezka);
+        List<String> listaStringów = new LinkedList();    //wczytuję tekst do listyStringów
         for (String line; (line = tekst.readLine()) != null; listaStringów.add(line)) ;
+
 
         Tekst s = new Tekst(listaStringów);
         listaStringów = s.usuwaZnaczki();
@@ -29,10 +65,12 @@ abstract class Parser {
         listaStringów = s.dzieliNaCzytelneWersy();
         listaStringów = zrobPreprocessing(s, listaStringów);
 
-        List<Fragment> listaFragmentów = new LinkedList<>();
-        Fragment fragment = new Fragment(TypFragmentu.Root, "root", 1);
-        fragment = s.Strukturyzuje();
-        return fragment;
+        List<Extract> listaFragmentów = new LinkedList<>();
+        Extract extract = new Extract(ExtractType.Root, "root", 1);
+        extract = s.Strukturyzuje();
+        return extract;
+
+
     }
 
     protected abstract List<String> zrobPreprocessing(Tekst s, List<String> listaStringów);

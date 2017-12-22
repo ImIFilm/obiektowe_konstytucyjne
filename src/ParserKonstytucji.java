@@ -6,7 +6,7 @@ public class ParserKonstytucji extends Parser {
         super(co);
     }
 
-    public Fragment WczytujeIPoprawia() throws IOException
+    public Extract WczytujeIPoprawia() throws IOException
     {
         return super.WczytujeIPoprawia();
     }

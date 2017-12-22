@@ -147,15 +147,15 @@ public class Tekst {
     }
 
 
-    public Fragment Strukturyzuje()
+    public Extract Strukturyzuje()
     {
-        Fragment root=new Fragment();
-        Fragment AktualnyRozdział=null;//new Fragment();
-        Fragment AktualnyArtykuł=null;
-        Fragment AktualnyPunkt=null;
-        Fragment AktualnyPodpunkt=null;
-        Fragment AktualnyDział=null;
-        Fragment Akt=root;
+        Extract root=new Extract();
+        Extract AktualnyRozdział=null;//new Extract();
+        Extract AktualnyArtykuł=null;
+        Extract AktualnyPunkt=null;
+        Extract AktualnyPodpunkt=null;
+        Extract AktualnyDział=null;
+        Extract Akt=root;
 
 
         for (int i=0; i<lista.size(); i++)
@@ -206,8 +206,8 @@ public class Tekst {
                     }
                 }
                 else {}
-                Fragment a = new Fragment(TypFragmentu.Dział, lista.get(i), foo);
-                root.lista.add(a);
+                Extract a = new Extract(ExtractType.Dział, lista.get(i), foo);
+                root.list.add(a);
                 AktualnyDział=a;
                 Akt=a;
             }
@@ -251,9 +251,9 @@ public class Tekst {
                     Matcher m2 = r2.matcher(line2);
                     if (m2.find( )) foo=Integer.parseInt(m2.group());
                 }
-                Fragment a = new Fragment(TypFragmentu.Rozdział, lista.get(i), foo);
-                if (AktualnyDział==null) root.lista.add(a);
-                else AktualnyDział.lista.add(a);
+                Extract a = new Extract(ExtractType.Rozdział, lista.get(i), foo);
+                if (AktualnyDział==null) root.list.add(a);
+                else AktualnyDział.list.add(a);
                 if(AktualnyRozdział!=null)AktualnyRozdział=a;
                 Akt=a;
             }
@@ -278,16 +278,16 @@ public class Tekst {
                 }
 
 
-                Fragment a = new Fragment(TypFragmentu.Artykuł, lista.get(i), foo, znak);
+                Extract a = new Extract(ExtractType.Article, lista.get(i), foo, znak);
                 if(AktualnyRozdział!=null)
                 {
-                    AktualnyRozdział.lista.add(a);
+                    AktualnyRozdział.list.add(a);
                 }
                 else if (AktualnyDział!=null)
                 {
-                    AktualnyDział.lista.add(a);
+                    AktualnyDział.list.add(a);
                 }
-                else root.lista.add(a);
+                else root.list.add(a);
                 AktualnyArtykuł=a;
                 Akt=a;
             }
@@ -299,8 +299,8 @@ public class Tekst {
                 Matcher m = r.matcher(line);
                 foo=0;
                 if (m.find( )) foo=Integer.parseInt(m.group());
-                Fragment a = new Fragment(TypFragmentu.Punkt, lista.get(i), foo);
-                AktualnyArtykuł.lista.add(a);
+                Extract a = new Extract(ExtractType.Section, lista.get(i), foo);
+                AktualnyArtykuł.list.add(a);
                 AktualnyPunkt=a;
                 Akt=a;
             }
@@ -312,8 +312,8 @@ public class Tekst {
                 Matcher m = r.matcher(line);
                 foo=0;
                 if (m.find( )) foo=Integer.parseInt(m.group());
-                Fragment a = new Fragment(TypFragmentu.Podpunkt, lista.get(i), foo);
-                AktualnyPunkt.lista.add(a);
+                Extract a = new Extract(ExtractType.Point, lista.get(i), foo);
+                AktualnyPunkt.list.add(a);
                 AktualnyPodpunkt=a;
                 Akt=a;
             }
@@ -325,19 +325,19 @@ public class Tekst {
                 Matcher m = r.matcher(line);
                 char foo2='a';
                 if (m.find( )) foo2=m.group().charAt(0);
-                Fragment a = new Fragment(TypFragmentu.Litera, lista.get(i), (char) foo2);
-                AktualnyPodpunkt.lista.add(a);
+                Extract a = new Extract(ExtractType.Sign, lista.get(i), (char) foo2);
+                AktualnyPodpunkt.list.add(a);
                 Akt=a;
             }
             else if (lista.get(i).length()>3 && lista.get(i).substring(0,3).equals("a. ")) //specyficznasytuacja dla uokiku
             {
-                Fragment a = new Fragment (TypFragmentu.Punkt, lista.get(i), 1);
-                Akt.lista.add(a);
+                Extract a = new Extract(ExtractType.Section, lista.get(i), 1);
+                Akt.list.add(a);
             }
             else
             {
-                Fragment a = new Fragment(TypFragmentu.Root, lista.get(i), 0);
-                Akt.lista.add(a);
+                Extract a = new Extract(ExtractType.Root, lista.get(i), 0);
+                Akt.list.add(a);
             }
         }
         return root;
